@@ -5,11 +5,11 @@ def gram_schmidt(vv):
     def projection(u, v):
         return (v * u).sum() / (u * u).sum() * u
 
-    nk = vv.size(0)
+    nk = vv.size(1)
     uu = torch.zeros_like(vv, device=vv.device)
     uu[:, 0] = vv[:, 0].clone()
     for k in range(1, nk):
-        vk = vv[k].clone()
+        vk = vv[:, k].clone()
         uk = 0
         for j in range(0, k):
             uj = uu[:, j].clone()
@@ -23,7 +23,7 @@ def gram_schmidt(vv):
 
 if __name__ == '__main__':
     torch.autograd.set_detect_anomaly(True)
-    a = torch.randn(5, 5, requires_grad=True)
+    a = torch.randn(5, 2, requires_grad=True)
     b = gram_schmidt(a)
     c = b.sum()
     c.backward()
